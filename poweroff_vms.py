@@ -19,9 +19,12 @@ def getvminfo(vm, depth=1):
         return
 
     summary = vm.summary
-    #print(summary.config.name)
-    if summary.runtime.powerState == 'poweredOn' and 'L2-' in summary.config.name:
-        vm_list_poweredon.append(vm)
+    if summary.runtime.powerState == 'poweredOn':
+        if args.string:
+            if args.string.lower() in summary.config.name.lower():
+                vm_list_poweredon.append(vm)
+        else:
+            vm_list_poweredon.append(vm)
 
 def main(args):
     si = SmartConnectNoSSL(host=args.node,user=args.user,pwd=args.pwd,port=args.port)
@@ -34,17 +37,16 @@ def main(args):
         vmlist = vmfolder.childEntity
         for vm in vmlist:
             getvminfo(vm)
-    print("==========\nPowered on\n==========")
-    for vm in vm_list_poweredon:
-        print(vm.summary.config.name)
-        print("vmTools: {}".format(vm.summary.guest.toolsStatus))
-        print("power: {}".format(vm.summary.runtime.powerState))
-        if vm.summary.guest.toolsStatus == "toolsOk":
-            print("Shutting down {}".format(vm.summary.config.name))
-            vm.ShutdownGuest()
-        else:
-            print("Powering Off {}".format(vm.summary.config.name))
-            vm.PowerOff()
+    if vm_list_poweredon:
+        for vm in vm_list_poweredon:
+            if vm.summary.guest.toolsStatus == "toolsOk":
+                print("Shutting down {}".format(vm.summary.config.name))
+                vm.ShutdownGuest()
+            else:
+                print("Powering Off {}".format(vm.summary.config.name))
+                vm.PowerOff()
+    else:
+        print("No vms to power off")
 
     Disconnect(si)
 
@@ -53,7 +55,16 @@ if __name__ == '__main__':
     u_opts.add_argument("-n","--node",type=str,help="IP or hostname to connect to",required=True)
     u_opts.add_argument("-u","--user",type=str,help="Username for vCenter/ESXI",required=True)
     u_opts.add_argument("-p","--port",type=int,help="Port to connect to host",default=443,required=False)
+    u_opts.add_argument("-s","--string",type=str,help="Portion of vm Name to filter",required=False)
 
     args = u_opts.parse_args()
     args.pwd = getpass.getpass("Password for {0} on {1}: ".format(args.user,args.node))
-    main(args)
+
+    if args.string:
+        main(args)
+    else:
+        print("Will shutdown all vms!")
+        if 'y' == raw_input("Are you sure? [y/n] ").lower():
+            main(args)
+        else:
+            print("Aborting")
