@@ -47,6 +47,10 @@ def main(args):
                 vm.PowerOff()
     else:
         print("No vms to power off")
+    
+    searcher = si.content.searchIndex
+    host = searcher.FindByDnsName(dnsName=args.node,vmSearch=False)
+    host.Shutdown(0)
 
     Disconnect(si)
 

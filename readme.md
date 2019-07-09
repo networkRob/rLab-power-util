@@ -2,13 +2,13 @@
 This repo will have scripts to help safely power down ESXI vms, ESXI hosts, any fileservers and integrate with Kasa controlled powerstrips to shut power off.
 
 #### Purpose
-The purpose of this ti find a way to easily shutdown my lab environment completely when not in use and to power it back on when needed.
+The purpose of this to find a way to easily shutdown my lab environment completely when not in use and to power it back on when needed.
 
 #### Requirements
 This script requires the `PyVmomi` PIP package.
 
 #### Example
-For `poweroff_vms.py` it can shutdown a specified vm name, portion of vm name or all vms.
+For `poweroff_vms.py` it can shutdown a specified vm name, portion of vm name or all vms.  It will check to see if the vm is capable of a guestShutdown.  If not, it will power off the vm.
 
 ```
 $ ./poweroff_vms.py --help
