@@ -14,7 +14,7 @@ pheaders = {
 def main(args):
     node = args.node
     pwd = args.pwd
-    response = requests.request("POST","http://{0}/{1}".format(node,api_url['shutdown'],headers=pheaders,auth=("root",pwd)))
+    response = requests.request("POST","http://{0}{1}".format(node,api_url['shutdown'],headers=pheaders,auth=("root",pwd)))
     print(response.text)
 
 
