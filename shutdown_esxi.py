@@ -2,9 +2,11 @@
 
 from pyVmomi import vim
 from pyVim.connect import SmartConnectNoSSL, Disconnect
+from time import sleep
 import argparse, getpass
 
 MAX_DEPTH = 10
+SLEEPDELAY = 120
 vm_list_poweredon = []
 
 def getvminfo(vm, depth=1):
@@ -50,9 +52,13 @@ def main(args):
     
     searcher = si.content.searchIndex
     host = searcher.FindByDnsName(dnsName=args.node,vmSearch=False)
-    host.Shutdown(0)
+    print("Waiting {} seconds for vms to shutdown".format(SLEEPDELAY))
+    sleep(SLEEPDELAY)
+    print("Shutting down {}".format(args.node))
+    host.Shutdown(1)
 
     Disconnect(si)
+    print("Shutdown complete")
 
 if __name__ == '__main__':
     u_opts = argparse.ArgumentParser()
