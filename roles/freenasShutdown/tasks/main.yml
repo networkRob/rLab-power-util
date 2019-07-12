@@ -1,6 +1,9 @@
 - name: Shutdown freenas
-  shell: shutdown now
+  shell: shutdown
   register: pout
 - name: debug freenas data
   debug:
     msg: "{{ pout }} "
+- name: Add time delay
+  wait_for:
+    timeout: 60
