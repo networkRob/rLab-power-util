@@ -13,7 +13,7 @@
 - name: debug esxi facts
   debug:
     msg: "{{ esxi_power }} "
-    
+
 - name: Wait for ssh to be down
   delegate_to: localhost
   wait_for:
@@ -21,4 +21,4 @@
     host: "{{ ansible_host }}"
     delay: 10
     state: stopped
-    timeout: 90
+    timeout: 120
