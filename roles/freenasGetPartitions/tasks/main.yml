@@ -1,0 +1,6 @@
+- name: gather freenas Parition facts
+  shell: df -Ph
+  register: pout
+- name: debug freenas data
+  debug:
+    msg: "{{ pout }} "
