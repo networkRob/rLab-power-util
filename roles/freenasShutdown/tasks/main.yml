@@ -1,6 +1,14 @@
 - name: Shutdown freenas
-  shell: shutdown now
+  shell: shutdown -p +1
   register: pout
 - name: debug freenas data
   debug:
-    msg: "{{ pout }} "
+    msg: "{{ pout }}"
+- name: Wait for ssh to be down
+  delegate_to: localhost
+  wait_for:
+    port: 22
+    host: "{{ ansible_host }}"
+    delay: 10
+    state: stopped
+    timeout: 90
