@@ -1,0 +1,11 @@
+- name: gather esxi facts
+  vmware_host_facts:
+    hostname: "{{ esxi_node }}"
+    username: "{{ esxi_user }}"
+    password: "{{ esxi_password }}"
+    validate_certs: no
+  register: vm_facts
+  delegate_to: localhost
+- name: debug esxi facts
+  debug:
+    msg: "{{ vm_facts }} "

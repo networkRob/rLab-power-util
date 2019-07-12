@@ -1,0 +1,72 @@
+# - name: shutdown guest
+#   vmware_guest_powerstate:
+#     hostname: "{{ esxi_node }}"
+#     username: "{{ esxi_user }}"
+#     password: "{{ esxi_password }}"
+#     validate_certs: no
+#     uuid: "{{ l_host_11 }}"
+#     state: shutdown-guest
+#     state_change_timeout: 120
+#   register: vm_facts
+#   delegate_to: localhost
+# - name: gather vm facts
+#   vmware_guest_facts:
+#     hostname: "{{ esxi_node }}"
+#     username: "{{ esxi_user }}"
+#     password: "{{ esxi_password }}"
+#     validate_certs: no
+#     uuid: 564dfa03-f1cc-1f66-335f-127accc2b17e
+#     datacenter: ha-datacenter
+#   register: vm_facts
+#   delegate_to: localhost
+- name: gather vm facts
+  vmware_vm_facts:
+    hostname: "{{ esxi_node }}"
+    username: "{{ esxi_user }}"
+    password: "{{ esxi_password }}"
+    validate_certs: no
+    vm_type: vm
+  register: vm_facts
+  delegate_to: localhost
+# - name: gather esxi facts
+#   vmware_host_facts:
+#     hostname: "{{ esxi_node }}"
+#     username: "{{ esxi_user }}"
+#     password: "{{ esxi_password }}"
+#     validate_certs: no
+#   register: vm_facts
+#   delegate_to: localhost
+- name: filter to powered on
+  set_fact: 
+    power_vm: "{{ power_vm + [ item.uuid ] }}"
+  loop: "{{ vm_facts.virtual_machines }}"
+  when: item.power_state == "poweredOn"
+- name: get powered on vms facts
+  vmware_guest_facts:
+    hostname: "{{ esxi_node }}"
+    username: "{{ esxi_user }}"
+    password: "{{ esxi_password }}"
+    validate_certs: no
+    uuid: "{{ item }}"
+    datacenter: ha-datacenter
+  register: vm_details
+  delegate_to: localhost
+  loop: "{{ power_vm }}"
+- name: Filter vms with guest tools running
+  set_fact:
+    vm_guest_run: "{{ vm_guest_run + [ [item.item, item.instance.hw_name] ] }}"
+  loop: "{{ vm_details.results }}"
+  when: item.instance.guest_tools_status == "guestToolsRunning"
+- name: Filter vms with guest tools not running
+  set_fact:
+    vm_guest_no: "{{ vm_guest_no + [ [item.item, item.instance.hw_name] ] }}"
+  loop: "{{ vm_details.results }}"
+  when: item.instance.guest_tools_status != "guestToolsRunning"
+- name: debug guest running
+  debug:
+    var: "{{ item }}"
+  loop: "{{ vm_guest_run }}"
+- name: debug guest not running
+  debug:
+    var: "{{ item }} "
+  loop: "{{ vm_guest_no }}"
