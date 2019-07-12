@@ -1,0 +1,57 @@
+- name: gather vm facts
+  vmware_vm_facts:
+    hostname: "{{ esxi_node }}"
+    username: "{{ esxi_user }}"
+    password: "{{ esxi_password }}"
+    validate_certs: no
+    vm_type: vm
+  register: vm_facts
+  delegate_to: localhost
+
+- name: filter to powered on
+  set_fact: 
+    power_vm: "{{ power_vm + [ item.uuid ] }}"
+  loop: "{{ vm_facts.virtual_machines }}"
+  when: item.power_state == "poweredOn"
+
+- name: get powered on vms facts
+  vmware_guest_facts:
+    hostname: "{{ esxi_node }}"
+    username: "{{ esxi_user }}"
+    password: "{{ esxi_password }}"
+    validate_certs: no
+    uuid: "{{ item }}"
+    datacenter: ha-datacenter
+  register: vm_details
+  delegate_to: localhost
+  loop: "{{ power_vm }}"
+
+- name: powerOff guests
+  vmware_guest_powerstate:
+    hostname: "{{ esxi_node }}"
+    username: "{{ esxi_user }}"
+    password: "{{ esxi_password }}"
+    validate_certs: no
+    uuid: "{{ item.item }}"
+    state: powered-off
+  loop: "{{ vm_details.results }}"
+  when: item.instance.guest_tools_status != "guestToolsRunning"
+  delegate_to: localhost
+
+- name: shutdown guest
+  vmware_guest_powerstate:
+    hostname: "{{ esxi_node }}"
+    username: "{{ esxi_user }}"
+    password: "{{ esxi_password }}"
+    validate_certs: no
+    uuid: "{{ item.item }}"
+    state: shutdown-guest
+    state_change_timeout: 120
+  loop: "{{ vm_details.results }}"
+  when: item.instance.guest_tools_status == "guestToolsRunning"
+  delegate_to: localhost
+
+- name: Sleep timer to ensure all is powered down
+  wait_for:
+    timeout: 30
+  delegate_to: localhost

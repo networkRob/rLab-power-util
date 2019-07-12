@@ -1,0 +1,11 @@
+- name: Shutdown linux host
+  shell: shutdown -p +1
+  
+- name: Wait for ssh to be down
+  delegate_to: localhost
+  wait_for:
+    port: 22
+    host: "{{ ansible_host }}"
+    delay: 10
+    state: stopped
+    timeout: 90

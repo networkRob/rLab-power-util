@@ -5,23 +5,5 @@ This repo will have scripts to help safely power down ESXI vms, ESXI hosts, any 
 The purpose of this to find a way to easily shutdown my lab environment completely when not in use and to power it back on when needed.
 
 #### Requirements
-This script requires the `PyVmomi` PIP package.
-
-#### Example
-For `poweroff_vms.py` it can shutdown a specified vm name, portion of vm name or all vms.  It will check to see if the vm is capable of a guestShutdown.  If not, it will power off the vm.
-
-```
-$ ./poweroff_vms.py --help
-usage: poweroff_vms.py [-h] -n NODE -u USER [-p PORT] [-s STRING]
-
-optional arguments:
-  -h, --help                    show this help message and exit
-  -n NODE, --node NODE          IP or hostname to connect to
-  -u USER, --user USER          Username for vCenter/ESXI
-  -p PORT, --port PORT          Port to connect to host
-  -s STRING, --string STRING    Portion of vm Name to filter
-
-$ ./poweroff_vms.py -n vcenter-01 -u username -s L2-
-
-```
+This playbook requires the `PyVmomi` PIP package.
 
