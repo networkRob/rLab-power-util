@@ -1,0 +1,6 @@
+---
+- hosts: esxi
+  gather_facts: no
+  roles:
+    - role: esxiGuestShutdown
+    - role: esxiHostShutdown
