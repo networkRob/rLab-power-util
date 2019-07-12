@@ -70,3 +70,7 @@
   debug:
     var: "{{ item }} "
   loop: "{{ vm_guest_no }}"
+- name: Sleep timer to ensure all is powered down
+  wait_for:
+    timeout: 60
+  delegate_to: localhost
