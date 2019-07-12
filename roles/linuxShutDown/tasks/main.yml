@@ -1,2 +1,2 @@
 - name: Shutdown linux host
-  shell: shutdown
+  shell: shutdown -p +1
