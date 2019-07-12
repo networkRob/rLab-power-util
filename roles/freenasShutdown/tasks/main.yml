@@ -3,12 +3,12 @@
   register: pout
 - name: debug freenas data
   debug:
-    msg: "{{ pout }} "
+    msg: "{{ pout }}"
 - name: Wait for ssh to be down
   delegate_to: localhost
   wait_for:
     port: 22
-    host: "{{ target_host }}"
+    host: "{{ ansible_host }}"
     delay: 10
     state: stopped
     timeout: 90
