@@ -1,0 +1,6 @@
+- name: Shutdown freenas
+  shell: shutdown now
+  register: pout
+- name: debug freenas data
+  debug:
+    msg: "{{ pout }} "

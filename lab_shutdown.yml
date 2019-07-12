@@ -4,3 +4,8 @@
   roles:
     - role: esxiGuestShutdown
     - role: esxiHostShutdown
+- hosts: freenas
+  gather_facts: no
+  remote_user: root
+  roles:
+    - role: freenasGetPartitions
