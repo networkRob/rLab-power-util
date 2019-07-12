@@ -1,5 +1,6 @@
 - name: Shutdown linux host
   shell: shutdown -p +1
+  
 - name: Wait for ssh to be down
   delegate_to: localhost
   wait_for:
