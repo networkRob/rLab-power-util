@@ -9,6 +9,7 @@
     force: yes
   delegate_to: localhost
   register: esxi_power
+  
 - name: debug esxi facts
   debug:
     var: "{{ esxi_power }} "
