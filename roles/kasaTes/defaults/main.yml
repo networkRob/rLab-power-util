@@ -1,0 +1,8 @@
+smarttest:
+  - test1
+  - test2
+  - test3
+plugs:
+  - kasa-ss-1
+  - kasa-ss-2
+  
