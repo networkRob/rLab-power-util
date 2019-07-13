@@ -30,14 +30,21 @@ def main(user_args):
     try:
         ss = SmartStrip(user_args.plug)
     except:
-        return({"msg":"Unable to connect to {}".format(user_args.plug)})
-    return({"msg":"Success {}".format(", ".join([user_args.plug,user_args.device]))})
-    # for splug in ss1.sys_info['children']:
-    #     L_PLUGS.append(Plugs(splug['alias'], \
-    #         ss1.sys_info['children'].index(splug), ss1, splug['state']))
-    # for splug in ss2.sys_info['children']:
-    #     L_PLUGS.append(Plugs(splug['alias'], \
-    #         ss2.sys_info['children'].index(splug), ss2, splug['state']))
+        return("False")
+
+    for splug in ss.sys_info['children']:
+        if user_args.device.lower() in splug['alias'].lower():
+            p_ind = ss.sys_info['children'].index(splug)
+            if user_args.action.upper() == ss.state[p_ind]:
+                print("Noting to do")
+            elif user_args.action.upper() == 'ON':
+                print("Current State: {0}".format(ss.state[p_ind]))
+                ss.turn_on(index=p_ind)
+                print("New State: {0}".format(ss.state[p_ind]))
+            elif user_args.action.upper() == 'OFF':
+                print("Current State: {0}".format(ss.state[p_ind]))
+                ss.turn_off(index=p_ind)
+                print("New State: {0}".format(ss.state[p_ind]))
 
 if __name__ == "__main__":
     U_OPTS = argparse.ArgumentParser()

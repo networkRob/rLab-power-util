@@ -14,9 +14,7 @@
 #   remote_user: root
 #   roles:
 #     - role: freenasShutdown
-- hosts: kasa
+- hosts: localhost
   gather_facts: no
-  remote_user: rmartin
   roles:
-    - role: kasaTes
-    
+    - role: kasaTest
