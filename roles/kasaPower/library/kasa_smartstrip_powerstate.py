@@ -52,7 +52,7 @@ def ss_turn_on(ss, plug_ind):
     function to change the powerstate of a given index on Kasa Smart Strip.
     """
     tmp_dict = {
-        'alias': ss.get_alias(index=plug_ind)
+        'alias': ss_get_alias(ss, plug_ind)
     }
     try:
         ss.turn_on(index=plug_ind)
@@ -68,7 +68,7 @@ def ss_turn_off(ss, plug_ind):
     function to change the powerstate of a given index on Kasa Smart Strip.
     """
     tmp_dict = {
-        'alias': ss.get_alias(index=plug_ind)
+        'alias': ss_get_alias(ss, plug_ind)
     }
     try:
         ss.turn_off(index=plug_ind)
@@ -79,7 +79,10 @@ def ss_turn_off(ss, plug_ind):
         tmp_dict['status'] = "Error"
     return(tmp_dict)
 
-def ss_get_powerstate(ss,plug_ind):
+def ss_get_alias(ss, plug_ind):
+    return(ss.get_alias(index=plug_ind))
+
+def ss_get_powerstate(ss, plug_ind):
     return(ss.state[plug_ind])
 
 def main():
@@ -100,8 +103,10 @@ def main():
     result = dict(changed=False)
 
     smart = SmartStrip(module.params['ss_plug'])
+    
     if smart.state[module.params['plug_index']] == power_mappings[module.params['powerstate']]:
         result['ansible_module_results'] = {
+            'alias': ss_get_alias(smart, module.params['plug_index']),
             'status': 'no change',
             'powerstate': ss_get_powerstate(smart, module.params['plug_index']),
             'info': "No Action needed"}
@@ -109,6 +114,7 @@ def main():
         result['ansible_module_results'] = ss_turn_on(smart, module.params['plug_index'])
     elif module.params['powerstate'].lower() == 'absent':
         result['ansible_module_results'] = ss_turn_off(smart, module.params['plug_index'])
+    
     if result['ansible_module_results']['status'] == 'Success':
         result['changed'] = True
     
