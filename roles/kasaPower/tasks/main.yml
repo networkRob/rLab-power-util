@@ -7,6 +7,7 @@
 - name: Get plug info
   delegate_to: localhost
   kasa_smartstrip_getplugs:
+    ss_plug: kasa-ss-2
   register: kasaInfo
 - name: debug
   debug:
