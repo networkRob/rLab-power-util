@@ -1,12 +1,15 @@
 - name: Get plug info
   delegate_to: localhost
   kasa_smartstrip_getplugs:
-    ss_plug: kasa-ss-2
+    ss_plug: "{{ item }}"
   register: kasaInfo
+  loop:
+    - kasa-ss-1
+    - kasa-ss-2
 - name: debug
   debug:
     msg: "{{ item }}"
-  loop: "{{ kasaInfo }}"
+  loop: "{{ kasaInfo.ansible_module_results }}"
 # - name: Turn off monitor plug
 #   delegate_to: localhost
 #   kasa_smartstrip_powerstate:

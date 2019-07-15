@@ -57,7 +57,8 @@ def ss_get_plugs(ss, name):
             tmp_dict['name'] = ss.get_alias(index=plug)
             tmp_dict['index'] = plug
             tmp_dict['powerstate'] = ss_get_powerstate(ss, plug)
-        tmp_plugs.append(tmp_dict)
+        if tmp_dict:
+            tmp_plugs.append(tmp_dict)
     return(tmp_plugs)
 
 
