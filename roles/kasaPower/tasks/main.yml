@@ -1,9 +1,3 @@
-# - name: Turn off monitor plug
-#   delegate_to: localhost
-#   kasa_smartstrip_powerstate:
-#     ss_plug: kasa-ss-2
-#     plug_index: 5
-#     powerstate: absent
 - name: Get plug info
   delegate_to: localhost
   kasa_smartstrip_getplugs:
@@ -11,4 +5,11 @@
   register: kasaInfo
 - name: debug
   debug:
-    msg: "{{ kasaInfo }}"
+    msg: "{{ item }}"
+  loop: "{{ kasaInfo }}"
+# - name: Turn off monitor plug
+#   delegate_to: localhost
+#   kasa_smartstrip_powerstate:
+#     ss_plug: kasa-ss-2
+#     plug_index: 5
+#     powerstate: absent
