@@ -1,19 +1,9 @@
-# - name: Shutdown freenas
-#   tags:
-#     - lab_off
-#   shell: poweroff
-#   register: pout
-
 - name: Get Basic Auth string
   delegate_to: localhost
-  tags:
-    - lab_off
   script: encode_auth.py -u root -p {{ ansible_ssh_pass }}
   register: basic_auth_string
 
 - name: Shutdown Freenas API
-  tags:
-    - lab_off
   delegate_to: localhost
   uri:
     url: "https://{{ ansible_host }}/api/v1.0/system/shutdown/"
@@ -25,18 +15,15 @@
   register: free_api
 
 - name: debug freenas data
-  tags:
-    - lab_off
   debug:
     msg: "{{ free_api }}"
 
 - name: Wait for ssh to be down
-  tags:
-    - lab_off
   connection: local
   wait_for:
     port: 22
-    host: "{{ ansible_host }}"
+    search_regex: OpenSSH
+    host: "{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}"
     delay: 10
     state: stopped
     timeout: 600
