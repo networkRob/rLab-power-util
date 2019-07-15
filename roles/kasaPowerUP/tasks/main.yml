@@ -1,0 +1,79 @@
+- name: Power on Group 1 devices
+  block:
+  - name: Get plug info for Group 1 devices
+    delegate_to: localhost
+    kasa_smartstrip_getplugs:
+      ss_plug: "{{ item[0] }}"
+      name: "{{ item[1] }}"
+    register: kasaInfoGroup1
+    with_nested: 
+      - "{{ smart_strips }}"
+      - "{{ plugs_group_1 }}"
+
+  - name: Turn on all Group 1 plugs
+    delegate_to: localhost
+    kasa_smartstrip_powerstate:
+      ss_plug: "{{ item.1.host }}"
+      plug_index: "{{ item.1.index }}"
+      powerstate: present
+    loop: "{{ kasaInfoGroup1.results | subelements('plugs', skip_missing=True) }}"
+
+  - name: Wait for Critical Group 1 devices to be UP
+    wait_for:
+      host: "{{ item }}"
+      port: 22
+      search_regex: OpenSSH
+      delay: 10
+      timeout: 600
+    connection: local
+    loop: "{{ dev_check_1 }}"
+
+- name: Power on Group 2 devices
+  block:
+  - name: Get plug info for Group 2 devices
+    delegate_to: localhost
+    kasa_smartstrip_getplugs:
+      ss_plug: "{{ item[0] }}"
+      name: "{{ item[1] }}"
+    register: kasaInfoGroup2
+    with_nested: 
+      - "{{ smart_strips }}"
+      - "{{ plugs_group_2 }}"
+
+  - name: Turn on all Group 2 plugs
+    delegate_to: localhost
+    kasa_smartstrip_powerstate:
+      ss_plug: "{{ item.1.host }}"
+      plug_index: "{{ item.1.index }}"
+      powerstate: present
+    loop: "{{ kasaInfoGroup2.results | subelements('plugs', skip_missing=True) }}"
+
+  - name: Wait for Critical Group 2 devices to be UP
+    wait_for:
+      host: "{{ item }}"
+      port: 22
+      search_regex: OpenSSH
+      delay: 10
+      timeout: 600
+    connection: local
+    loop: "{{ dev_check_2 }}"
+
+- name: Power on Group 3 devices
+  block:
+  - name: Get plug info for Group 3 devices
+    delegate_to: localhost
+    kasa_smartstrip_getplugs:
+      ss_plug: "{{ item[0] }}"
+      name: "{{ item[1] }}"
+    register: kasaInfoGroup3
+    with_nested: 
+      - "{{ smart_strips }}"
+      - "{{ plugs_group_3 }}"
+
+  - name: Turn on all Group 3 plugs
+    delegate_to: localhost
+    kasa_smartstrip_powerstate:
+      ss_plug: "{{ item.1.host }}"
+      plug_index: "{{ item.1.index }}"
+      powerstate: present
+    loop: "{{ kasaInfoGroup3.results | subelements('plugs', skip_missing=True) }}"
