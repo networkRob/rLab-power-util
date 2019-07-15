@@ -4,7 +4,7 @@ from base64 import b64encode
 import argparse
 
 def main(auth_str):
-    auth_code = "Basic {0}==".format(b64encode(auth_str.encode()).decode('ascii'))
+    auth_code = "Basic {0}".format(b64encode(auth_str.encode()).decode('ascii'))
     return(auth_code)
 
 if __name__ == '__main__':

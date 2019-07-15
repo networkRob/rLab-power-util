@@ -1,14 +1,34 @@
-- name: Shutdown freenas
+# - name: Shutdown freenas
+#   tags:
+#     - lab_off
+#   shell: poweroff
+#   register: pout
+
+- name: Get Basic Auth string
+  delegate_to: localhost
   tags:
     - lab_off
-  shell: poweroff
-  register: pout
+  script: encode_auth.py -u root -p {{ ansible_ssh_pass }}
+  register: basic_auth_string
+
+- name: Shutdown Freenas API
+  tags:
+    - lab_off
+  delegate_to: localhost
+  uri:
+    url: "https://{{ ansible_host }}/api/v1.0/system/shutdown/"
+    method: POST
+    validate_certs: no
+    headers: 
+      Content-Type: "application/json"
+      Authorization: "{{ basic_auth_string }}"
+  register: free_api
 
 - name: debug freenas data
   tags:
     - lab_off
   debug:
-    msg: "{{ pout }}"
+    msg: "{{ free_api }}"
 
 # - name: Wait for ssh to be down
 #   tags:
