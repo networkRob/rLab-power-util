@@ -2,26 +2,15 @@
   delegate_to: localhost
   kasa_smartstrip_getplugs:
     ss_plug: "{{ item }}"
-    name: '7280'
+    name: 'monitor'
   register: kasaInfo
   loop:
     - kasa-ss-1
     - kasa-ss-2
-# - name: set plugs facts
-#   set_fact:
-#     kasa_plugs: |
-#         {% set res = [] %}
-#         {{ res.append({{ item.plugs }}) }}
-#         {{ res }}
-#   loop: "{{ kasaInfo.results }}"
-- name: debug
-  debug:
-    msg: "{{ item.1.host }}"
+- name: Turn off monitor plug
+  delegate_to: localhost
+  kasa_smartstrip_powerstate:
+    ss_plug: "{{ item.1.host }}"
+    plug_index: "{{ item.1.index"
+    powerstate: absent
   loop: "{{ kasaInfo.results | subelements('plugs') }}"
-# - name: Turn off monitor plug
-#   delegate_to: localhost
-#   kasa_smartstrip_powerstate:
-#     ss_plug: "{{ item.plugs.host }}"
-#     plug_index: 5
-#     powerstate: absent
-#   loop: "{{ kasaInfo.results }}"
