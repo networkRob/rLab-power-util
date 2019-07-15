@@ -17,4 +17,4 @@
 - hosts: localhost
   gather_facts: no
   roles:
-    - role: kasaTest
+    - role: kasaPower
