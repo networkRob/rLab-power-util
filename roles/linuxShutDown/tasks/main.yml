@@ -1,7 +1,7 @@
 - name: Shutdown linux host
   tags:
     - lab_off
-  shell: shutdown -p +1
+  shell: shutdown +1
   
 - name: Wait for ssh to be down
   tags:
