@@ -14,3 +14,7 @@
   remote_user: root
   roles:
     - role: freenasShutdown
+- hosts: localhost
+  gather_facts: no
+  roles:
+    - role: kasaPower
