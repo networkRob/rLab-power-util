@@ -1,5 +1,5 @@
 - name: Shutdown linux host
-  shell: "sleep 10 && shutdown"
+  shell: "shutdown"
   
 - name: Wait for ssh to be down
   connection: local
