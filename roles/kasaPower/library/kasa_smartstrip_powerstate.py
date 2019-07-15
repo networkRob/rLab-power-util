@@ -100,9 +100,9 @@ def main():
     if smart.state[module.params['plug_index']] == power_mappings[module.params['powerstate']]:
         return("False")
     elif module.params['powerstate'].lower() == 'present':
-        result['results'] = ss_turn_on(smart, module.params.plug_index)
+        result['results'] = ss_turn_on(smart, module.params['plug_index'])
     elif module.params['powerstate'].lower() == 'absent':
-        result['results'] = ss_turn_on(smart, module.params.plug_index)
+        result['results'] = ss_turn_on(smart, module.params['plug_index'])
     
     module.exit_json(**result)
     
