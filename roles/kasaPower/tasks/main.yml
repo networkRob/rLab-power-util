@@ -13,4 +13,4 @@
     ss_plug: "{{ item.1.host }}"
     plug_index: "{{ item.1.index"
     powerstate: absent
-  loop: "{{ kasaInfo.results | subelements('plugs') }}"
+  loop: "{{ kasaInfo.results | subelements('plugs', skip_missing=True) }}"
