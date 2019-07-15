@@ -1,0 +1,19 @@
+smarttest:
+  - monitor
+smart_strips:
+  - kasa-ss-1
+  - kasa-ss-2
+plugs_group_1:
+  - 7280SE
+  - '3550'
+  - Code
+plugs_group_2:
+  - Free-02
+plugs_group_3:
+  - ESXI-02
+dev_check_1:
+  - rtr-01.rob.lab
+  - rtr-02.rob.lab
+dev_check_2:
+  - free-02.mhome.lab
+  

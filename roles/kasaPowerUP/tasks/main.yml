@@ -1,0 +1,29 @@
+- name: Get plug info
+  delegate_to: localhost
+  tags:
+    - lab_on
+    - lab_off
+  kasa_smartstrip_getplugs:
+    ss_plug: "{{ item }}"
+  register: kasaInfo
+  loop: "{{ smart_strips }}"
+
+- name: Turn off all plugs
+  delegate_to: localhost
+  tags:
+    - lab_off
+  kasa_smartstrip_powerstate:
+    ss_plug: "{{ item.1.host }}"
+    plug_index: "{{ item.1.index }}"
+    powerstate: absent
+  loop: "{{ kasaInfo.results | subelements('plugs', skip_missing=True) }}"
+
+- name: Turn on all plugs
+  delegate_to: localhost
+  tags:
+    - lab_on
+  kasa_smartstrip_powerstate:
+    ss_plug: "{{ item.1.host }}"
+    plug_index: "{{ item.1.index }}"
+    powerstate: present
+  loop: "{{ kasaInfo.results | subelements('plugs', skip_missing=True) }}"
