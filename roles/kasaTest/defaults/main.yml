@@ -1,5 +1,0 @@
-smarttest:
-  - monitor
-plugs:
-  - kasa-ss-1
-  - kasa-ss-2

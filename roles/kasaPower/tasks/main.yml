@@ -1,5 +1,8 @@
 - name: Get plug info
   delegate_to: localhost
+  tags:
+    - pon
+    - poff
   kasa_smartstrip_getplugs:
     ss_plug: "{{ item }}"
     name: monitor
@@ -25,4 +28,3 @@
     plug_index: "{{ item.1.index }}"
     powerstate: present
   loop: "{{ kasaInfo.results | subelements('plugs', skip_missing=True) }}"
-  
