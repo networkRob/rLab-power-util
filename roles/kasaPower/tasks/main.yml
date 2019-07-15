@@ -1,10 +1,17 @@
-- name: gather freenas Parition facts
-  script: kasa_smartStrip.py -a on -p "{{ item[0] }}" -d "{{ item[1] }}"
+- name: Turn off monitor plug
   delegate_to: localhost
+  kasa_smartstrip_powerstate:
+    ss_plug: kasa-ss-2
+    plug_index: 5
+    powerstate: off
   register: htest
-  with_nested:
-    - "{{ plugs }}"
-    - "{{ smarttest }}"
+# - name: gather freenas Parition facts
+#   script: kasa_smartStrip.py -a on -p "{{ item[0] }}" -d "{{ item[1] }}"
+#   delegate_to: localhost
+#   register: htest
+#   with_nested:
+#     - "{{ plugs }}"
+#     - "{{ smarttest }}"
 - name: debug
   debug:
     var: htest
