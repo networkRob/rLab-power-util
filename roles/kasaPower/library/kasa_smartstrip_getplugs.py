@@ -58,6 +58,7 @@ def ss_get_plugs(ss, name):
             tmp_dict['index'] = plug
             tmp_dict['powerstate'] = ss_get_powerstate(ss, plug)
         if tmp_dict:
+            tmp_dict['host'] = ss.host
             tmp_plugs.append(tmp_dict)
     return(tmp_plugs)
 
@@ -77,7 +78,7 @@ def main():
 
     smart = SmartStrip(module.params['ss_plug'])
 
-    result['ansible_module_results'] = ss_get_plugs(smart, module.params['name'])
+    result['results'] = ss_get_plugs(smart, module.params['name'])
         
     module.exit_json(**result)
     
