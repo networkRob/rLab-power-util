@@ -78,7 +78,7 @@ def main():
 
     smart = SmartStrip(module.params['ss_plug'])
 
-    result['results'] = ss_get_plugs(smart, module.params['name'])
+    result['plugs'] = ss_get_plugs(smart, module.params['name'])
         
     module.exit_json(**result)
     

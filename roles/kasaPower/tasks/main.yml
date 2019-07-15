@@ -9,8 +9,8 @@
     - kasa-ss-2
 - name: debug
   debug:
-    msg: "{{ kasaInfo }}"
-#   loop: "{{ kasaInfo.ansible_module_results }}"
+    msg: "{{ item }}"
+  loop: "{{ kasaInfo.results }}"
 # - name: Turn off monitor plug
 #   delegate_to: localhost
 #   kasa_smartstrip_powerstate:
