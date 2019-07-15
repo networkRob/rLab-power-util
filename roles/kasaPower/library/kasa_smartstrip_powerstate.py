@@ -58,11 +58,9 @@ def ss_turn_on(ss, plug_ind):
         ss.turn_on(index=plug_ind)
         tmp_dict['powerstate'] = ss_get_powerstate(ss,plug_ind)
         tmp_dict['status'] = "Success"
-        tmp_dict['changed'] = True
     except:
         tmp_dict['powerstate'] = ss_get_powerstate(ss,plug_ind)
         tmp_dict['status'] = "Error"
-        tmp_dict['failed'] = True
     return(tmp_dict)
 
 def ss_turn_off(ss, plug_ind):
@@ -76,11 +74,9 @@ def ss_turn_off(ss, plug_ind):
         ss.turn_off(index=plug_ind)
         tmp_dict['powerstate'] = ss_get_powerstate(ss,plug_ind)
         tmp_dict['status'] = "Success"
-        tmp_dict['changed'] = True
     except:
         tmp_dict['powerstate'] = ss_get_powerstate(ss,plug_ind)
         tmp_dict['status'] = "Error"
-        tmp_dict['failed'] = True
     return(tmp_dict)
 
 def ss_get_powerstate(ss,plug_ind):
@@ -105,13 +101,16 @@ def main():
 
     smart = SmartStrip(module.params['ss_plug'])
     if smart.state[module.params['plug_index']] == power_mappings[module.params['powerstate']]:
-        result['results'] = {
+        result['ansible_module_results'] = {
+            'status': 'no change',
             'powerstate': ss_get_powerstate(smart, module.params['plug_index']),
             'info': "No Action needed"}
     elif module.params['powerstate'].lower() == 'present':
-        result['results'] = ss_turn_on(smart, module.params['plug_index'])
+        result['ansible_module_results'] = ss_turn_on(smart, module.params['plug_index'])
     elif module.params['powerstate'].lower() == 'absent':
-        result['results'] = ss_turn_off(smart, module.params['plug_index'])
+        result['ansible_module_results'] = ss_turn_off(smart, module.params['plug_index'])
+    if result['ansible_module_results']['status'] == 'Success':
+        result['changed'] = True
     
     module.exit_json(**result)
     
