@@ -93,12 +93,12 @@ def main():
     result = dict(changed=False)
 
     smart = SmartStrip(module.params['ss_plug'])
-    if smart.state['plug_ind'].lower() == module.params['powerstate'].lower():
+    if smart.state['plug_index'].lower() == module.params['powerstate'].lower():
         return(False)
     elif module.params['powerstate'].lower() == 'on':
-        result['results'] = ss_turn_on(smart, module.params.plug_ind)
+        result['results'] = ss_turn_on(smart, module.params.plug_index)
     elif module.params['powerstate'].lower() == 'off':
-        result['results'] = ss_turn_on(smart, module.params.plug_ind)
+        result['results'] = ss_turn_on(smart, module.params.plug_index)
     
     module.exit_json(**result)
     
