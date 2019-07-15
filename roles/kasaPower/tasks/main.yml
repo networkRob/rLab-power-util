@@ -8,10 +8,11 @@
     - kasa-ss-1
     - kasa-ss-2
 - name: set plugs facts
-  var:
-    kasa_plugs: []
   set_fact:
-    kasa_plugs: "{{ kasa_plugs + [ item.plugs ] }}"
+    kasa_plugs: |
+        {% set res = [] %}
+        {{ res.append({{ item.plugs }}) }}
+        {{ res }}
   loop: "{{ kasaInfo.results }}"
 - name: debug
   debug:
