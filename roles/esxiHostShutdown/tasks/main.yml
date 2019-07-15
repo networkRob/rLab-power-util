@@ -10,6 +10,10 @@
   delegate_to: localhost
   register: esxi_power
 
+- name: debug esxi power
+  debug:
+    msg: "{{ esxi_power }}"
+
 - name: Wait for ssh to be down
   connection: local
   wait_for:
