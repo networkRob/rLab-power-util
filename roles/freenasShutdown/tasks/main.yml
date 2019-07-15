@@ -1,7 +1,7 @@
 - name: Shutdown freenas
   tags:
     - lab_off
-  shell: shutdown -p +1
+  shell: poweroff +30s
   register: pout
 
 - name: debug freenas data
