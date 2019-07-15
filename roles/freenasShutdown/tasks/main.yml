@@ -10,13 +10,19 @@
   debug:
     msg: "{{ pout }}"
 
+# - name: Wait for ssh to be down
+#   tags:
+#     - lab_off
+#   delegate_to: localhost
+#   wait_for:
+#     port: 22
+#     host: "{{ ansible_host }}"
+#     delay: 10
+#     state: stopped
+#     timeout: 600
 - name: Wait for ssh to be down
   tags:
     - lab_off
   delegate_to: localhost
   wait_for:
-    port: 22
-    host: "{{ ansible_host }}"
-    delay: 10
-    state: stopped
-    timeout: 600
+    timeout: 90
