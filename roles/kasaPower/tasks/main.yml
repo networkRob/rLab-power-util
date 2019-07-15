@@ -5,7 +5,6 @@
     - lab_off
   kasa_smartstrip_getplugs:
     ss_plug: "{{ item }}"
-    name: monitor
   register: kasaInfo
   loop: "{{ smart_strips }}"
 
