@@ -16,7 +16,7 @@
 #   loop: "{{ kasaInfo.results }}"
 - name: debug
   debug:
-    msg: "{{ item }}"
+    msg: "{{ item.1.host }}"
   loop: "{{ kasaInfo.results | subelements('plugs') }}"
 # - name: Turn off monitor plug
 #   delegate_to: localhost
