@@ -28,8 +28,8 @@ options:
         required: true
     powerstate:
         choices: 
-            - on
-            - off
+            - present
+            - absent
         description:
             - Set the powerstate of the plug on the smart strip.
         required: true
@@ -87,17 +87,21 @@ def main():
         powerstate=dict(required=True),
         plug_index=dict(type=int, required=True),
     )
+    power_mappings = {
+        "present": 'ON',
+        "absent": 'OFF'
+    }
     
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=False)
     result = dict(changed=False)
 
     smart = SmartStrip(module.params['ss_plug'])
-    if smart.state['plug_index'].lower() == module.params['powerstate'].lower():
-        return(False)
-    elif module.params['powerstate'].lower() == 'on':
+    if smart.state[module.params['plug_index']] == power_mappings[module.params['powerstate']]:
+        return("False")
+    elif module.params['powerstate'].lower() == 'present':
         result['results'] = ss_turn_on(smart, module.params.plug_index)
-    elif module.params['powerstate'].lower() == 'off':
+    elif module.params['powerstate'].lower() == 'absent':
         result['results'] = ss_turn_on(smart, module.params.plug_index)
     
     module.exit_json(**result)

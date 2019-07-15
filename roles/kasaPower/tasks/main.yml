@@ -3,7 +3,7 @@
   kasa_smartstrip_powerstate:
     ss_plug: kasa-ss-2
     plug_index: 5
-    powerstate: off
+    powerstate: absent
   register: htest
 # - name: gather freenas Parition facts
 #   script: kasa_smartStrip.py -a on -p "{{ item[0] }}" -d "{{ item[1] }}"
