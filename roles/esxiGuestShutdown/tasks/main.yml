@@ -26,6 +26,18 @@
   delegate_to: localhost
   loop: "{{ power_vm }}"
 
+- name: shutdown guests
+  vmware_guest_powerstate:
+    hostname: "{{ esxi_node }}"
+    username: "{{ esxi_user }}"
+    password: "{{ esxi_password }}"
+    validate_certs: no
+    uuid: "{{ item.item }}"
+    state: shutdown-guest
+  loop: "{{ vm_details.results }}"
+  when: item.instance.guest_tools_status == "guestToolsRunning"
+  delegate_to: localhost
+
 - name: powerOff guests
   vmware_guest_powerstate:
     hostname: "{{ esxi_node }}"
@@ -36,19 +48,6 @@
     state: powered-off
   loop: "{{ vm_details.results }}"
   when: item.instance.guest_tools_status != "guestToolsRunning"
-  delegate_to: localhost
-
-- name: shutdown guest
-  vmware_guest_powerstate:
-    hostname: "{{ esxi_node }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
-    validate_certs: no
-    uuid: "{{ item.item }}"
-    state: shutdown-guest
-    state_change_timeout: 120
-  loop: "{{ vm_details.results }}"
-  when: item.instance.guest_tools_status == "guestToolsRunning"
   delegate_to: localhost
 
 - name: Sleep timer to ensure all is powered down

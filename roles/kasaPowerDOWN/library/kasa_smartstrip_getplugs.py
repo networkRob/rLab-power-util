@@ -34,7 +34,6 @@ author:
     - Rob Martin (@networkRob)
 '''
 
-import argparse
 from ansible.module_utils.basic import AnsibleModule
 from pyHS100 import SmartStrip
 
