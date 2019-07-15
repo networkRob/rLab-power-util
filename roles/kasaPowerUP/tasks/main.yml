@@ -77,4 +77,3 @@
       plug_index: "{{ item.1.index }}"
       powerstate: present
     loop: "{{ kasaInfoGroup3.results | subelements('plugs', skip_missing=True) }}"
-    
