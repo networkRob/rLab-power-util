@@ -1,8 +1,8 @@
 - name: Get plug info
   delegate_to: localhost
   tags:
-    - pon
-    - poff
+    - lab_on
+    - lab_off
   kasa_smartstrip_getplugs:
     ss_plug: "{{ item }}"
     name: monitor
@@ -12,17 +12,17 @@
 - name: Turn off all plugs
   delegate_to: localhost
   tags:
-    - poff
+    - lab_off
   kasa_smartstrip_powerstate:
     ss_plug: "{{ item.1.host }}"
     plug_index: "{{ item.1.index }}"
     powerstate: absent
   loop: "{{ kasaInfo.results | subelements('plugs', skip_missing=True) }}"
 
-- name: Turn off all plugs
+- name: Turn on all plugs
   delegate_to: localhost
   tags:
-    - pon
+    - lab_on
   kasa_smartstrip_powerstate:
     ss_plug: "{{ item.1.host }}"
     plug_index: "{{ item.1.index }}"
