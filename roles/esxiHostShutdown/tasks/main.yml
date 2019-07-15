@@ -1,4 +1,6 @@
 - name: PowerOff ESXI
+  tags:
+    - lab_off
   vmware_host_powerstate:
     hostname: "{{ esxi_node }}"
     username: "{{ esxi_user }}"
@@ -10,15 +12,13 @@
   delegate_to: localhost
   register: esxi_power
 
-- name: debug esxi facts
-  debug:
-    msg: "{{ esxi_power }} "
-
 - name: Wait for ssh to be down
+  tags:
+    - lab_off
   delegate_to: localhost
   wait_for:
     port: 22
     host: "{{ ansible_host }}"
     delay: 10
     state: stopped
-    timeout: 120
+    timeout: 600
