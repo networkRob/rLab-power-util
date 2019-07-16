@@ -7,9 +7,13 @@
     url_username: 'root'
     url_password: "{{ ansible_ssh_pass }}"
     force_basic_auth: yes
+    status_code:
+        - 200
+        - 202
     headers: 
       Content-Type: "application/json"
   register: free_api
+  ignore_errors: yes
 
 - name: debug freenas data
   debug:
