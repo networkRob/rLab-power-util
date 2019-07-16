@@ -6,7 +6,7 @@
 - name: Shutdown Freenas API
   delegate_to: localhost
   uri:
-    url: "https://{{ ansible_host }}/api/v1.0/system/shutdown/"
+    url: "https://{{ freenas_addr }}/api/v1.0/system/shutdown/"
     method: POST
     validate_certs: no
     headers: 
