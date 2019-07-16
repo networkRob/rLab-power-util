@@ -1,17 +1,14 @@
-- name: Get Basic Auth string
-  delegate_to: localhost
-  script: encode_auth.py -u root -p {{ ansible_ssh_pass }}
-  register: basic_auth_string
-
 - name: Shutdown Freenas API
   delegate_to: localhost
   uri:
-    url: "https://{{ freenas_addr }}/api/v1.0/system/shutdown/"
+    url: "http://{{ inventory_hostname }}/api/v1.0/system/shutdown/"
     method: POST
     validate_certs: no
+    url_username: 'root'
+    url_password: "{{ ansible_ssh_pass }}"
+    force_basic_auth: yes
     headers: 
       Content-Type: "application/json"
-      Authorization: "{{ basic_auth_string }}"
   register: free_api
 
 - name: debug freenas data
