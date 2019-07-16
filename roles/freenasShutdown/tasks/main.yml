@@ -13,7 +13,6 @@
     headers: 
       Content-Type: "application/json"
   register: free_api
-  ignore_errors: yes
 
 - name: debug freenas data
   debug:
